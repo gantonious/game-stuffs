@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller.cs" />
+    <Compile Include="EntityFramework\ComponentSelector.cs" />
     <Compile Include="EntityFramework\Components\Player.cs" />
     <Compile Include="EntityFramework\Components\Collide.cs" />
     <Compile Include="EntityFramework\Components\Component.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="EntityFramework\Components\Rain.cs" />
     <Compile Include="EntityFramework\Components\SpriteComponent.cs" />
     <Compile Include="EntityFramework\Components\Velocity.cs" />
+    <Compile Include="EntityFramework\Engine.cs" />
     <Compile Include="EntityFramework\Entity.cs" />
     <Compile Include="EntityFramework\Systems\CollisionHandler.cs" />
     <Compile Include="EntityFramework\Systems\CollisionSystem.cs" />

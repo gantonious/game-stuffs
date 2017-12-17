@@ -9,17 +9,20 @@ namespace HeatWaveTest.EntityFramework.Systems
 {
     class CollisionHandler : System
     {
+        public ComponentSelector ComponentSelector = new ComponentSelector(typeof(Collide), typeof(Player), typeof(SpriteComponent));
+
         public override void Process(Entity entity)
         {
-            Collide collide = entity.GetComponent<Collide>();
-            Player player = entity.GetComponent<Player>();
-            SpriteComponent sprite = entity.GetComponent<SpriteComponent>();
+            if (entity.HasComponentsFor(ComponentSelector))
+            {
+                Collide collide = entity.GetComponent<Collide>();
+                Player player = entity.GetComponent<Player>();
+                SpriteComponent sprite = entity.GetComponent<SpriteComponent>();
 
-            if (collide == null || player == null || sprite == null) return;
-
-            entity.RemoveComponent<Collide>();
-            sprite.Sprite.Width *= 1.01f;
-            sprite.Sprite.Height *= 1.01f;
+                entity.RemoveComponent<Collide>();
+                sprite.Sprite.Width *= 1.01f;
+                sprite.Sprite.Height *= 1.01f;
+            }
         }
     }
 }

@@ -23,7 +23,7 @@ namespace HeatWaveTest.EntityFramework.Systems
             {
                 foreach (Entity entity2 in entities)
                 {
-                    if (entity1 == entity2) continue;
+                    if (entity1.EntityID == entity2.EntityID) continue;
                     Position pos1 = entity1.GetComponent<Position>();
                     SpriteComponent sprite1 = entity1.GetComponent<SpriteComponent>();
 

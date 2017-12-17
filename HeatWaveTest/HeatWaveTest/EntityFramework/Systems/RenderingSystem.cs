@@ -10,6 +10,8 @@ namespace HeatWaveTest.EntityFramework.Systems
 {
     public class RenderingSystem : System
     {
+        public ComponentSelector ComponentSelector = new ComponentSelector(typeof(Position), typeof(SpriteComponent));
+
         public Renderer Renderer { get; private set; }
 
         public RenderingSystem(Renderer renderer)
@@ -29,12 +31,12 @@ namespace HeatWaveTest.EntityFramework.Systems
 
         public override void Process(Entity entity)
         {
-            Position position = entity.GetComponent<Position>();
-            SpriteComponent sprite = entity.GetComponent<SpriteComponent>();
-
-            if (position == null || sprite == null) return;
-
-            Renderer.Draw(position.X, position.Y, sprite.Sprite.Width, sprite.Sprite.Height, sprite.Sprite.Texture);
+            if (entity.HasComponentsFor(ComponentSelector))
+            {
+                Position position = entity.GetComponent<Position>();
+                SpriteComponent sprite = entity.GetComponent<SpriteComponent>();
+                Renderer.Draw(position.X, position.Y, sprite.Sprite.Width, sprite.Sprite.Height, sprite.Sprite.Texture);
+            }
         }
     }
 }

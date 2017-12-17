@@ -10,17 +10,19 @@ namespace HeatWaveTest.EntityFramework.Systems
 {
     public class MovementSystem : System
     {
+        public ComponentSelector ComponentSelector = new ComponentSelector(typeof(Velocity), typeof(Position));
         public MovementSystem() { }
 
         public override void Process(Entity entity)
         {
-            Velocity velocity = entity.GetComponent<Velocity>();
-            Position position = entity.GetComponent<Position>();
+            if (entity.HasComponentsFor(ComponentSelector))
+            {
+                Velocity velocity = entity.GetComponent<Velocity>();
+                Position position = entity.GetComponent<Position>();
 
-            if (velocity == null || position == null) return;
-
-            position.X += velocity.XVelocity;
-            position.Y += velocity.YVelocity;
+                position.X += velocity.XVelocity;
+                position.Y += velocity.YVelocity;
+            }
         }
     }
 }

@@ -52,7 +52,7 @@ namespace HeatWaveTest
             entity.AddComponent(new Player());
             entities.Add(entity);
 
-            for (int i = 1; i < 2000; i++)
+            for (int i = 1; i < 100000; i++)
             {
                 entity = new Entity(i);
                 entity.AddComponent(new Position(i * 40, 0));
@@ -81,16 +81,16 @@ namespace HeatWaveTest
             Position pos = entities[0].GetComponent<Position>();
             audioManager.SetListenerVelocity(pos.X, pos.Y);
 
-            collisionSystem.Begin();
+            //collisionSystem.Begin();
             foreach (Entity entity in entities)
             {
                 inputSystem.Process(entity);
                 movementSystem.Process(entity);
                 scriptingSystem.Process(entity);
-                collisionSystem.Process(entity);
+                //collisionSystem.Process(entity);
                 collisionHandler.Process(entity);
             }
-            collisionSystem.End();
+            //collisionSystem.End();
         }
      
         public override void Render()
@@ -98,6 +98,8 @@ namespace HeatWaveTest
             renderingSystem.Begin();
             foreach (Entity entity in entities) renderingSystem.Process(entity);
             renderingSystem.End();
+
+            SceneManager.Title = "fps: " + SceneManager.RenderFrequency;
         }
 
         

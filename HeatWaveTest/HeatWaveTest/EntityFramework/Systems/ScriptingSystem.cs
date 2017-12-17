@@ -10,6 +10,8 @@ namespace HeatWaveTest.EntityFramework.Systems
 {
     class ScriptingSystem : System
     {
+        public ComponentSelector ComponentSelector = new ComponentSelector(typeof(Velocity), typeof(Position), typeof(PreUpdateScript));
+
         private Lua LuaState { get; set; }
         private string lastScript = "";
         private LuaFunction lastFunc = null;
@@ -31,20 +33,21 @@ namespace HeatWaveTest.EntityFramework.Systems
 
         public override void Process(Entity entity)
         {
-            Velocity velocity = entity.GetComponent<Velocity>();
-            Position position = entity.GetComponent<Position>();
-            PreUpdateScript script = entity.GetComponent<PreUpdateScript>();
-
-            if (velocity == null || position == null || script == null) return;
-
-            if (!(lastScript == script.Script))
+            if (entity.HasComponentsFor(ComponentSelector))
             {
-                LuaState.DoString(script.Script);
-                lastFunc = (LuaFunction)LuaState[script.FuncName];
-                lastScript = script.Script;
-            }
+                Velocity velocity = entity.GetComponent<Velocity>();
+                Position position = entity.GetComponent<Position>();
+                PreUpdateScript script = entity.GetComponent<PreUpdateScript>();
 
-            lastFunc.Call(position, velocity);
+                if (!(lastScript == script.Script))
+                {
+                    LuaState.DoString(script.Script);
+                    lastFunc = (LuaFunction)LuaState[script.FuncName];
+                    lastScript = script.Script;
+                }
+
+                lastFunc.Call(position, velocity);
+            }
         }
     }
 }

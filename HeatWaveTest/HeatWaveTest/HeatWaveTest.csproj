@@ -69,6 +69,7 @@
     <Compile Include="EntityFramework\Systems\CollisionHandler.cs" />
     <Compile Include="EntityFramework\Systems\CollisionSystem.cs" />
     <Compile Include="EntityFramework\Systems\InputSystem.cs" />
+    <Compile Include="EntityFramework\Systems\RainSystem.cs" />
     <Compile Include="EntityFramework\Systems\ScriptingSystem.cs" />
     <Compile Include="EntityFramework\Systems\MovementSystem.cs" />
     <Compile Include="EntityFramework\Systems\RenderingSystem.cs" />

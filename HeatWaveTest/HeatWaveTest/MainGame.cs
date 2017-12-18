@@ -14,15 +14,8 @@ namespace HeatWaveTest
         private Renderer renderer;
         private List<Sprite> sprites;
         private List<Source> sources;
-        private double lastAngle = -1;
         private AudioManager audioManager;
-        private List<Entity> entities;
-        private MovementSystem movementSystem;
-        private RenderingSystem renderingSystem;
-        private ScriptingSystem scriptingSystem;
-        private InputSystem inputSystem;
-        private CollisionSystem collisionSystem;
-        private CollisionHandler collisionHandler;
+        private Engine engine;
 
         public MainGame(SceneManager sceneManager) : base(sceneManager)
         {
@@ -35,73 +28,47 @@ namespace HeatWaveTest
             renderer = new ImmediateModeRenderer();
             sprites = new List<Sprite>();
             sources = new List<Source>();
-            entities = new List<Entity>();
 
-            string script = "";
+            engine = new Engine();
+            engine.RegisterLogicalSystem(new MovementSystem());
+            engine.RegisterLogicalSystem(new ScriptingSystem());
+            engine.RegisterLogicalSystem(new InputSystem());
+            //engine.RegisterLogicalSystem(new CollisionSystem());
+            engine.RegisterLogicalSystem(new CollisionHandler());
+            engine.RegisterRenderingSystem(new RenderingSystem(renderer));
 
-            using (StreamReader file = new StreamReader("Assets/Scripts/movement_script.lua"))
+            var playerEntity = engine.CreateEntity();
+            playerEntity.AddComponent(new Position(0, 0));
+            playerEntity.AddComponent(new Input(new KeyboardAndMouse()));
+            playerEntity.AddComponent(new Velocity(0, 0));
+            playerEntity.AddComponent(new SpriteComponent(new Sprite(0, 0, 20, 20, SceneManager.AssetManager.LoadTexture("Assets/Images/heart.png"))));
+            playerEntity.AddComponent(new Player());
+
+            for (int i = 1; i < 10000; i++)
             {
-                script = file.ReadToEnd();
+                var rainEntity = engine.CreateEntity();
+                rainEntity.AddComponent(new Position(i * 40, 0));
+                rainEntity.AddComponent(new Velocity(0, 1));
+                rainEntity.AddComponent(new SpriteComponent(new Sprite(0, 0, 20, 20, SceneManager.AssetManager.LoadTexture("Assets/Images/heart.png"))));
+                rainEntity.AddComponent(new Rain());
             }
-
-            Entity entity = new Entity(0);
-            entity.AddComponent(new Position(0, 0));
-            entity.AddComponent(new Input(new KeyboardAndMouse()));
-            entity.AddComponent(new Velocity(0, 0));
-            entity.AddComponent(new SpriteComponent(new Sprite(0, 0, 20, 20, SceneManager.AssetManager.LoadTexture("Assets/Images/heart.png"))));
-            entity.AddComponent(new Player());
-            entities.Add(entity);
-
-            for (int i = 1; i < 100000; i++)
-            {
-                entity = new Entity(i);
-                entity.AddComponent(new Position(i * 40, 0));
-                entity.AddComponent(new Velocity(0, 1));
-                //entity.AddComponent(new SpriteComponent(new Sprite(0, 0, 20, 20, SceneManager.AssetManager.LoadTexture("Assets/Images/heart.png"))));
-                entity.AddComponent(new Rain());
-                entities.Add(entity);
-            }
-
-            movementSystem = new MovementSystem();
-            scriptingSystem = new ScriptingSystem();
-            renderingSystem = new RenderingSystem(renderer);
-            inputSystem = new InputSystem();
-            collisionSystem = new CollisionSystem();
-            collisionHandler = new CollisionHandler();
 
             sources.Add(new Source(SceneManager.AssetManager.LoadWave("Assets/Audio/main game.wav")));
             sources[0].Play();
             sources[0].SetPosition(350, 200);
             sources[0].ReferenceDistance = 200f;
             //sources[0].SetVelocity(0, 0);
-
         }
 
-        public override void Update(double delta) {
-            Position pos = entities[0].GetComponent<Position>();
-            audioManager.SetListenerVelocity(pos.X, pos.Y);
-
-            //collisionSystem.Begin();
-            foreach (Entity entity in entities)
-            {
-                inputSystem.Process(entity);
-                movementSystem.Process(entity);
-                scriptingSystem.Process(entity);
-                //collisionSystem.Process(entity);
-                collisionHandler.Process(entity);
-            }
-            //collisionSystem.End();
+        public override void Update(double delta)
+        {
+            engine.Update(delta);
         }
      
         public override void Render()
         {
-            renderingSystem.Begin();
-            foreach (Entity entity in entities) renderingSystem.Process(entity);
-            renderingSystem.End();
-
+            engine.Render();
             SceneManager.Title = "fps: " + SceneManager.RenderFrequency;
         }
-
-        
     }
 }

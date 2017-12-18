@@ -9,6 +9,9 @@ namespace HeatWaveTest.EntityFramework.Systems
 {
     class CollisionSystem : System
     {
+        public override ComponentSelector ComponentSelector { get; }
+            = new ComponentSelector();
+
         private List<Entity> entities;
         public override void Begin()
         {

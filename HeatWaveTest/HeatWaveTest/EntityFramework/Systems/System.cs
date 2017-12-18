@@ -8,6 +8,8 @@ namespace HeatWaveTest.EntityFramework
 {
     public abstract class System
     {
+        public abstract ComponentSelector ComponentSelector { get; }
+
         public virtual void Begin() { }
         public virtual void End() { }
         public abstract void Process(Entity entity);

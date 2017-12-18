@@ -12,11 +12,14 @@ namespace HeatWaveTest.EntityFramework
         private List<System> _logicalSystems;
         private List<System> _renderingSystems;
 
+        private Dictionary<string, int> _taggedEntities;
+
         public Engine()
         {
             _entities = new List<Entity>();
             _logicalSystems = new List<System>();
             _renderingSystems = new List<System>();
+            _taggedEntities = new Dictionary<string, int>();
         }
 
         public Entity CreateEntity()
@@ -26,13 +29,25 @@ namespace HeatWaveTest.EntityFramework
             return newEntity;
         }
 
+        public void TagEntity(Entity entity, string name)
+        {
+            _taggedEntities[name] = entity.EntityID;
+        }
+
+        public Entity GetTaggedEntity(string name)
+        {
+            return _entities[_taggedEntities[name]];
+        }
+
         public void RegisterLogicalSystem(System system)
         {
+            system.Engine = this;
             _logicalSystems.Add(system);
         }
 
         public void RegisterRenderingSystem(System system)
         {
+            system.Engine = this;
             _renderingSystems.Add(system);
         }
 

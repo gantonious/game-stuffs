@@ -13,6 +13,8 @@ namespace HeatWaveTest.EntityFramework.Systems
         public override ComponentSelector ComponentSelector { get; } = 
             new ComponentSelector(typeof(Position), typeof(SpriteComponent));
 
+        public BoundedBox WindowBounds { get; set; }
+
         public Renderer Renderer { get; private set; }
 
         public RenderingSystem(Renderer renderer)
@@ -23,6 +25,7 @@ namespace HeatWaveTest.EntityFramework.Systems
         public override void Begin()
         {
             Renderer.Begin();
+            WindowBounds = Engine.GetTaggedEntity("window").GetComponent<BoundedBox>();
         }
 
         public override void End()
@@ -34,7 +37,11 @@ namespace HeatWaveTest.EntityFramework.Systems
         {
             Position position = entity.GetComponent<Position>();
             SpriteComponent sprite = entity.GetComponent<SpriteComponent>();
-            Renderer.Draw(position.X, position.Y, sprite.Sprite.Width, sprite.Sprite.Height, sprite.Sprite.Texture);
+
+            if (position.X < WindowBounds.Width && position.Y < WindowBounds.Height)
+            {
+                Renderer.Draw(position.X, position.Y, sprite.Sprite.Width, sprite.Sprite.Height, sprite.Sprite.Texture);
+            }
         }
     }
 }

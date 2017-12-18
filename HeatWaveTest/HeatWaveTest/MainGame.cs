@@ -34,7 +34,11 @@ namespace HeatWaveTest
             engine.RegisterLogicalSystem(new RainSystem());
             //engine.RegisterLogicalSystem(new CollisionSystem());
             engine.RegisterLogicalSystem(new CollisionHandler());
-            //engine.RegisterRenderingSystem(new RenderingSystem(renderer));
+            engine.RegisterRenderingSystem(new RenderingSystem(renderer));
+
+            var windowEntity = engine.CreateEntity();
+            windowEntity.AddComponent(new BoundedBox { Width = SceneManager.Width, Height = SceneManager.Height });
+            engine.TagEntity(windowEntity, "window");
 
             var playerEntity = engine.CreateEntity();
             playerEntity.AddComponent(new Position(0, 0));

@@ -9,6 +9,7 @@ namespace HeatWaveTest.EntityFramework
     public abstract class System
     {
         public abstract ComponentSelector ComponentSelector { get; }
+        public Engine Engine { get; set; }
 
         public virtual void Begin() { }
         public virtual void End() { }

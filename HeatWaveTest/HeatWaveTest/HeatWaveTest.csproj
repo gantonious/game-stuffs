@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Controller.cs" />
     <Compile Include="EntityFramework\ComponentSelector.cs" />
+    <Compile Include="EntityFramework\Components\BoundedBox.cs" />
     <Compile Include="EntityFramework\Components\Player.cs" />
     <Compile Include="EntityFramework\Components\Collide.cs" />
     <Compile Include="EntityFramework\Components\Component.cs" />

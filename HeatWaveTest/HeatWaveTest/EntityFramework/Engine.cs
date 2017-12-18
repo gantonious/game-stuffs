@@ -38,22 +38,18 @@ namespace HeatWaveTest.EntityFramework
 
         public void Update(double delta)
         {
-            foreach (var logicalSystem in _logicalSystems)
-            {
-                logicalSystem.Begin();
-            }
+            Parallel.ForEach(_logicalSystems, l => l.Begin());
 
-            foreach (var entity in _entities)
-            foreach (var logicalSystem in _logicalSystems)
-            if (entity.HasComponentsFor(logicalSystem.ComponentSelector))
+            Parallel.ForEach(_entities, e =>
             {
-                logicalSystem.Process(entity);
-            }
+                foreach (var logicalSystem in _logicalSystems)
+                if (e.HasComponentsFor(logicalSystem.ComponentSelector))
+                {
+                    logicalSystem.Process(e);
+                }
+            });
 
-            foreach (var logicalSystem in _logicalSystems)
-            {
-                logicalSystem.End();
-            }
+            Parallel.ForEach(_logicalSystems, l => l.End());
         }
 
         public void Render()

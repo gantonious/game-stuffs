@@ -12,7 +12,6 @@ namespace HeatWaveTest
     public class MainGame : Scene
     { 
         private Renderer renderer;
-        private List<Sprite> sprites;
         private List<Source> sources;
         private AudioManager audioManager;
         private Engine engine;
@@ -26,16 +25,16 @@ namespace HeatWaveTest
         {
             audioManager = new AudioManager();
             renderer = new ImmediateModeRenderer();
-            sprites = new List<Sprite>();
             sources = new List<Source>();
 
             engine = new Engine();
             engine.RegisterLogicalSystem(new MovementSystem());
             engine.RegisterLogicalSystem(new ScriptingSystem());
             engine.RegisterLogicalSystem(new InputSystem());
+            engine.RegisterLogicalSystem(new RainSystem());
             //engine.RegisterLogicalSystem(new CollisionSystem());
             engine.RegisterLogicalSystem(new CollisionHandler());
-            engine.RegisterRenderingSystem(new RenderingSystem(renderer));
+            //engine.RegisterRenderingSystem(new RenderingSystem(renderer));
 
             var playerEntity = engine.CreateEntity();
             playerEntity.AddComponent(new Position(0, 0));
@@ -44,7 +43,7 @@ namespace HeatWaveTest
             playerEntity.AddComponent(new SpriteComponent(new Sprite(0, 0, 20, 20, SceneManager.AssetManager.LoadTexture("Assets/Images/heart.png"))));
             playerEntity.AddComponent(new Player());
 
-            for (int i = 1; i < 10000; i++)
+            for (int i = 1; i < 100000; i++)
             {
                 var rainEntity = engine.CreateEntity();
                 rainEntity.AddComponent(new Position(i * 40, 0));
@@ -54,7 +53,7 @@ namespace HeatWaveTest
             }
 
             sources.Add(new Source(SceneManager.AssetManager.LoadWave("Assets/Audio/main game.wav")));
-            sources[0].Play();
+            //sources[0].Play();
             sources[0].SetPosition(350, 200);
             sources[0].ReferenceDistance = 200f;
             //sources[0].SetVelocity(0, 0);

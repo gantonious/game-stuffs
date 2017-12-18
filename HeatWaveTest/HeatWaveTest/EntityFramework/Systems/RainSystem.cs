@@ -15,7 +15,7 @@ namespace HeatWaveTest.EntityFramework.Systems
         public override void Process(Entity entity)
         {
             var velocity = entity.GetComponent<Velocity>();
-            velocity.YVelocity += 0.01f;
+            velocity.YVelocity += entity.EntityID * 0.0001f;
         }
     }
 }
